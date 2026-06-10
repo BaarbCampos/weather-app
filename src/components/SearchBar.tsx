@@ -2,34 +2,37 @@
 
 import { useState } from "react";
 
-export default function SearchBar({ onSearch }: any) {
+export default function SearchBar({
+  onSearch,
+  isLoading = false,
+}: {
+  onSearch: (city: string) => void;
+  isLoading?: boolean;
+}) {
   const [input, setInput] = useState("");
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+
     if (!input.trim()) return;
-    onSearch(input);
-    setInput("");
+
+    onSearch(input.trim());
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex items-center gap-2 w-full max-w-md">
-      <div className="relative flex-1">
-        {/* Ícone de lupa opcional estilizado */}
-        <input
-          type="text"
-          placeholder="Search location..."
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          className="w-full bg-[#1E224F] text-white placeholder-gray-400 pl-4 pr-10 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm border border-transparent focus:border-transparent"
-        />
-      </div>
+    <form onSubmit={handleSubmit} className="flex gap-2 w-full">
+      <input
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        placeholder="Search city..."
+        className="flex-1 bg-[#1E224F] px-4 py-3 rounded-xl text-white"
+      />
 
       <button
-        type="submit"
-        className="bg-blue-600 hover:bg-blue-500 text-white font-medium px-5 py-3 rounded-xl transition-colors text-sm shadow-md"
+        disabled={isLoading}
+        className="bg-blue-600 px-4 py-3 rounded-xl"
       >
-        Search
+        {isLoading ? "..." : "Search"}
       </button>
     </form>
   );
